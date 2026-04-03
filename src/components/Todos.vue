@@ -13,8 +13,8 @@ function listTodos() {
   client.models.Todo.observeQuery().subscribe({
     next: ({ items, isSynced }) => {
       todos.value = items
-     },
-  }); 
+    },
+  });
 }
 
 function createTodo() {
@@ -25,11 +25,17 @@ function createTodo() {
     listTodos();
   });
 }
-    
+
 // fetch todos when the component is mounted
- onMounted(() => {
+onMounted(() => {
   listTodos();
 });
+
+function deleteTodo(id: string) {
+  client.models.Todo.delete({ id }).then(() => {
+    listTodos();
+  });
+}
 
 </script>
 
@@ -38,18 +44,16 @@ function createTodo() {
     <h1>My todos</h1>
     <button @click="createTodo">+ new</button>
     <ul>
-      <li 
-        v-for="todo in todos" 
-        :key="todo.id">
+      <li v-for="todo in todos" :key="todo.id" @click="deleteTodo(todo.id)"">
         {{ todo.content }}
       </li>
     </ul>
     <div>
       🥳 App successfully hosted. Try creating a new todo.
       <br />
-      <a href="https://docs.amplify.aws/gen2/start/quickstart/nextjs-pages-router/">
+      <a href=" https://docs.amplify.aws/gen2/start/quickstart/nextjs-pages-router/">
         Review next steps of this tutorial.
-      </a>
-    </div>
+        </a>
+        </div>
   </main>
 </template>
